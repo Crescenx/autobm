@@ -1,0 +1,24 @@
+```python
+policy = {
+    "human_strategy": "Pr(a_t | history, params) = ...",  # Mathematical expression
+    "parameters": [
+      {"name": "param1", "description": ""},
+      # ...other parameters
+   ],
+   "constants": [
+      {"name": "constant1", "description": "", type: "int", value: 0},
+      # ...other constants
+   ],
+   "intermediate_terms": [
+      {
+         "name": "term1",
+         "description": "",
+         "computation": , #Mathematical expression or pseudocode
+      },
+      # ...other intermediate terms
+   ]
+}
+```
+- Parameters: Prespecified quantities that define a model's structural assumptions and requiring explicit learning from data using gradient descending.
+- Constants: SIMPLE fixed values that are NOT subject to learning or optimization, serving as reference points or prior assumptions or hyperparameters. If not neccessary, do not make float value as constants, leave them in parameters.
+- Intermediate terms: Dynamically generated transient variables derived during computational processes, which serve as critical feature design elements for capturing system behaviors.

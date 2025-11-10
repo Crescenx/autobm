@@ -1,0 +1,42 @@
+```python
+policy = {
+   "buyer_strategy": "Pr(q | H, Q_active, A_active, P, current_time) = ...", # Mathematical expression or pseudocode
+   "parameters": [
+      {"name": "param1", "description": ""},
+      # ...other parameters
+   ],
+   "constants": [
+      {"name": "constant1", "description": "", "type": "int", "value": 0},
+      # ...other constants
+   ],
+   "intermediate_terms": [
+      {
+         "name": "term1",
+         "description": "",
+         "computation": , # Mathematical expression or pseudocode
+      },
+      # ...other intermediate terms
+   ]
+}
+```
+- Parameters: Uncertain quantities within each term that represent the structural assumptions and cross-term weight-balancing parameters. Both are explicitly learned from data through gradient descent optimization.
+- Constants: Simple fixed values not suitable for optimization via gradient descent, typically manifesting as integer values or in the form of hyperparameters.
+- Intermediate terms: Dynamically generated variables derived during computational processes, which serve as critical feature design elements for capturing system behaviors.
+
+---
+
+## **Core Constraints**
+
+1. **Interpretability Constraints**: Ensure the model is fully interpretable.
+   - Avoid neural networks or any black-box models.
+   - Avoid using distributions with poor interpretability in any intermediate_terms (e.g. Gaussian, Dirichlet, Beta).
+
+2. **Formal Requirements**:
+   - Make sure that there are NO undefined terms in the policy.
+   - Each term should provide a clear mathematical expression or pseudocode that demonstrates how this term utilizes private/public information in its computation.
+   - Keep all computations in `policy={...}`.
+   
+3. Continuous probability distribution:
+   - The output of the model should be a continuous probability distribution over the normalized price $q$. Do not use discrete bid levels.
+   - Ensure that the output is a valid probability distribution, i.e., it integrates to 1 over the range of $q$.
+   - Use a normalization term $Z=\int_0^1 something dq$ or a softmax normalization $Z=\int_0^1 e^{something}dq$ to ensure the output is a valid probability distribution.

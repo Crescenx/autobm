@@ -1,0 +1,6 @@
+Both players are assumed to be bounded rational.
+
+Your task is to design a model to explain the strategies of proposers in the game.
+
+The model should provide the likelihood of proposers' offer based on the total amount.
+i.e. Pr(o|T), where q in [0,1]

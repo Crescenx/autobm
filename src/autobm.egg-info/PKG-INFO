@@ -1,0 +1,105 @@
+Metadata-Version: 2.4
+Name: autobm
+Version: 0.1.0
+Summary: An automated behavior modeling framework based on Large Language Models (LLM)
+Author: AutoBM Authors
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: openai
+Requires-Dist: anthropic
+Requires-Dist: jinja2
+Requires-Dist: pandas
+Requires-Dist: toml
+Requires-Dist: torch
+
+# AutoBM
+
+An automated behavior modeling framework based on Large Language Models (LLM).
+
+---
+
+## Setup
+
+### 1. Configure the Application
+
+All configuration is now managed through `pyproject.toml`. You can configure the following settings:
+
+1. **Task Selection**: Set the `current_task` in `[tool.autobm]` section to one of:
+   - `"ulti"` - Ultimatum Game
+   - `"rps"` - Rock-Paper-Scissors
+   - `"cda"` - Continuous Double Auction
+
+2. **LLM Configuration**: Set your API keys and base URLs in the `[tool.llm_client_config.model_mapping]` sections:
+   - For Qwen: Set `base_url` and `api_key` in `[tool.llm_client_config.model_mapping.quest]`
+   - For Claude: Set `base_url` and `api_key` in `[tool.llm_client_config.model_mapping.code]`
+
+Example configuration in `pyproject.toml`:
+```toml
+[tool.autobm]
+current_task = "ulti"  # Default task
+
+[tool.llm_client_config.model_mapping.quest]
+provider_type = "aliyun_openai_compatible"
+model = "qwen-max-2025-01-25"
+base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+api_key = "your-aliyun-api-key-here"
+
+[tool.llm_client_config.model_mapping.code]
+provider_type = "anthropic_claude"
+model = "claude-3-5-sonnet-latest"
+base_url = ""  # Leave empty if using default Anthropic endpoint
+api_key = "your-anthropic-api-key-here"
+```
+
+### 2. Install Dependencies
+
+#### Using uv (Recommended)
+
+With uv, dependencies are automatically managed. Simply run:
+
+```bash
+uv run python -m src.autobm.main
+```
+
+This will automatically:
+1. Create a virtual environment
+2. Install all required dependencies
+3. Run the application
+
+You can also use uv to run any other Python command with the project dependencies:
+
+```bash
+uv run python -c "import torch; print(torch.__version__)"
+```
+
+#### Traditional approach (Alternative)
+
+1. **Navigate to the project root directory** (where `pyproject.toml` is located) in your terminal.
+2. **Run `pip install .`**:
+
+    ```bash
+    pip install .
+    ```
+
+    This command tells `pip` to build the project in the current directory (`.`) and install it along with the dependencies listed in `pyproject.toml`.
+3. **For an editable install (recommended for development):**
+
+    ```bash
+    pip install -e .
+    ```
+
+---
+
+## Running the Application
+
+Run the program using uv:
+
+```bash
+uv run python -m src.autobm.main
+```
+
+Or if you installed dependencies traditionally:
+
+```bash
+python -m src.autobm.main
+```

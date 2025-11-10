@@ -1,0 +1,50 @@
+Below is the code provided for execution and testing:
+
+```python
+{{ code }}
+```
+
+Policy:
+```python
+{{ policy }}
+```
+
+Data Interface:
+{{ data_itf }}
+
+Error Log:
+{{ error_message }}
+
+Debug & Optimization Instructions
+
+1. Debugging  
+   - [ ] Analyze the error log to identify distinct error categories (e.g., shape/dtype mismatches, None values, API misuse, in-place operations).  
+   - [ ] For each category, locate all occurrences in the code and apply a single systematic fix across every instance.  
+   - [ ] Summarize each error type and the uniform correction applied.
+
+2. Tensor Consistency & Vectorization  
+   - [ ] Convert every list or NumPy array into `torch.Tensor` before use; remove all `.detach()`/`.data` except for true constants.  
+   - [ ] Eliminate Python loops and list comprehensions on tensors; replace with native vectorized operations.  
+   - [ ] Replace any `.apply_()` calls with built-in tensor methods (e.g. `tensor.pow(2) + 1`).  
+
+3. Computational Graph & Gradient Safety  
+   - [ ] No use of `.numpy()` or `.item()` inside forward/backward computations.  
+   - [ ] Control flow on tensors only via Python `if/else` with scalar conditions; avoid `torch.where` for branching.  
+   - [ ] Replace in-place updates (`x += y`) with functional equivalents (`x = x + y`), using `x.clone()` if needed.  
+
+4. Policy & Interface Validation  
+   - [ ] Confirm the refactored code still meets the given policy requirements.  
+   - [ ] Ensure the data interface contract remains unchanged.  
+
+Output Requirements  
+- First, provide a concise chain-of-thought summarizing your grouped error identification and correction steps.  
+- Then, in a single Python code block, output **only** the fully corrected code.  
+- Do **not** include any example usage, tests, or extra commentary.
+
+Template:
+
+(Chain-of-thought and key validation steps)
+
+```python
+{{ code_tpl }}
+```

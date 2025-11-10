@@ -1,0 +1,7 @@
+The repeated RPS game is an iterative strategic interaction where:
+1. Two players engage in multiple rounds (typically 50) of the classic Rock-Paper-Scissors game.
+2. In each round, players simultaneously choose an action a ∈ {Rock, Paper, Scissors}.
+3. The outcome is determined by standard RPS rules: Rock beats Scissors, Scissors beats Paper, Paper beats Rock.
+4. Players receive payoffs based on the outcome (typically +1 for win, 0 for tie, -1 for loss).
+5. Both players observe the full history of previous actions before each subsequent round.
+6. The game continues for the predetermined number of rounds (50), with cumulative payoffs tracked throughout.

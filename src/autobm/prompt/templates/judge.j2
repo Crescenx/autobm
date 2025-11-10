@@ -1,0 +1,33 @@
+{{ game_desc }}
+
+Here is a probabilistic policy model for human players.
+
+```python
+{{ policy }}
+```
+
+The model has tuned the parameter on the dataset of different market states and human players' actions.
+The following are the test results of the model on the test set.
+
+=== Test Outcom ===
+{{ vis }}
+
+=== Analysis Task ===  
+- Focus on term-level and structure-level analysis of the model. The value of parameters cannot  be manually changed, just view it as renferences.
+- **Categorize loss distribution patterns**: Identify game scenarios and participant behaviors where prediction loss is systematically higher vs. lower. Consider structural factors. 
+- **Analyze predictive power of model terms**: Evaluate how specific terms in the startegy function correlate with accuracy. Distinguish between terms that consistently reduce loss vs. those introducing noise or misalignment with game incentives.  
+- **Synthesize structural interactions**: Propose hypotheses explaining why certain term architectures succeed/fail in particular information environments or strategic landscapes.  
+- **Evaluation and Suggestions**: Based on the above analysis, provide a comprehensive evaluation of the current model and offer concrete suggestions to enhance its performance.  
+
+=== Output Requirements ===
+
+1. Provide a clear, step-by-step analysis.  
+2. Offer concrete, actionable improvement suggestions—no high-level platitudes or vague statements. 
+3. End with a “Conclusion” section of no more than five concise sentences, each stating a top insight or recommendation.  
+4. Use this Conclusion template:  
+
+   Conclusion:  
+   - {Most critical analysis finding/suggestion 1}  
+   - {Most critical analysis finding/suggestion 2}  
+   …  
+   - {Most critical analysis finding/suggestion 5}

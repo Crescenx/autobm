@@ -1,0 +1,23 @@
+All models **MUST** process data in the following format:
+```python
+# Batch structure (after preprocessing)
+T = 49
+batch = {
+    "human_hist": Tensor[int],    # shape [B, T]
+    "opponent_hist": Tensor[int], # shape [B, T]
+    "timestep": Tensor[int],      # shape [B]
+}
+
+# Label structure
+labels = Tensor[int]  # shape [B] (current human action)
+```
+And be aware that:
+1. The integer representation of actions are described as a action map:
+```
+action_map = {
+    "Rock":0,
+    "Scissor":1,
+    "Paper":2,
+}
+```
+1. The data is padded to the length of 'T'. Only data in the range [0:timestep] is valid.

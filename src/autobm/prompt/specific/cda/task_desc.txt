@@ -1,0 +1,56 @@
+Your task is to design a model to explain the strategies of buyers in the auctions.
+
+### Buyer information data interface
+
+For buyer $b_i$ in round $r$ at time $t$:
+
+#### Normalization Convention
+
+For buyer $b_i$, define the normalization operation:
+$$
+\text{normalize}_i(x) := \frac{x}{\beta_i}
+$$
+This applies to all prices or quotes shown to $b_i$, including both the buyer’s own and others’ bids/asks as displayed in the interface. All subsequent notation uses this normalized scaling.
+
+#### Information Interface
+
+```python
+# ---------------
+# Private Data Structures
+# ---------------
+
+class BidHistoryEntry:
+    """Represents a single bid submitted by buyer b_i in the current round"""
+    normalized_price: float   # q_i^{r,k} / β_i, range [0, 1]
+    is_expired: bool          # True if this bid is expired, False if active (see 10-second expiration rule)
+
+# ---------------
+# Public Data Structures
+# ---------------
+
+class BidOrderEntry:
+    """Represents an entry in the bid order book (as seen by b_i)"""
+    normalized_price: float   # Sorted descending (best bid first)
+    from_current: bool        # True if bid is from b_i, False otherwise
+
+class AskOrderEntry:
+    """Represents an entry in the ask order book (as seen by b_i)"""
+    normalized_price: float   # Sorted ascending (best ask first)
+    from_current: bool        # Always False (asks are from sellers)
+
+# ---------------
+# Buyer Interface Variables
+# ---------------
+
+current_time: float           # Current time t in the round (seconds)
+H: List[BidHistoryEntry]      # Buyer's bid history in current round
+Q_active: List[BidOrderEntry] # Order book: active bids (descending order)
+A_active: List[AskOrderEntry] # Order book: active asks (ascending order)
+P: List[float]                # Recent match history: all normalized match prices in current round
+```
+
+The model should provide the likelihood of a buyer’s new bid, given the information available at time $t$ in round $r$:
+$$
+Pr(q_{r,t} | \text{information}_{r,t})
+$$
+where $q_{r,t}$ is the normalized price of the new bid.

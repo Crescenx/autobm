@@ -1,0 +1,16 @@
+```python
+@dataclass
+class MarketState:
+    H_prices: torch.Tensor       # normalized prices of buyers
+    H_expired: torch.Tensor      # flag indicating if the bid is expired
+    Q_prices: torch.Tensor       # normalized prices of bid books
+    Q_from_current: torch.Tensor # flag indicating if the bid is from current buyer
+    A_prices: torch.Tensor       # normalized prices of ask books
+    P_series: torch.Tensor       # normalized prices of past trades
+    current_time: torch.Tensor   # current time in seconds, zero dimension
+
+@dataclass
+class Sample:
+    state: MarketState           # Market state
+    bid: float                   # buyer's current normalized bid price
+```

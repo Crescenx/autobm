@@ -1,0 +1,32 @@
+```python
+# [STRICT IMPLEMENTATION BEGIN]
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class GameModel(nn.Module):
+    def __init__(self):
+        super().__init__()
+        # Initialize learnable parameters here
+        # Use nn.Parameter for all parameters defined in the theoretical model
+        # Example:
+        # self.param1 = nn.Parameter(...)  # Add description if needed
+        pass
+
+    def forward(self, human_hist, opponent_hist, timestep):
+        """
+        Inputs:
+            - human_hist: Tensor[int], shape [B, T]
+            - opponent_hist: Tensor[int], shape [B, T]
+            - timestep: Tensor[int], shape [B]
+
+        Output:
+            - probs: Tensor[float], shape [B, 3] (normalized probabilities)
+        """
+        # Implement the theoretical model here using tensor operations
+        # Ensure all intermediate computations preserve batch dimension [B]
+        pass
+
+    # other possible auxiliary functions
+# [STRICT IMPLEMENTATION END]
+```

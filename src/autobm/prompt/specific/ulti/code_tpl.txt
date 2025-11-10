@@ -1,0 +1,37 @@
+```python
+# [STRICT IMPLEMENTATION BEGIN]
+import torch
+import torch.nn as nn
+
+class GameModel(nn.Module):
+    def __init__(self, n_samples=500):
+        super().__init__()
+        # Initialization of trainable parameters
+        # self.parameter1 = nn.Parameter(torch.tensor(0.5))  
+        
+        # Register constants
+        # self.register_buffer("constant1", torch.tensor(0.5)) 
+
+        # Generate the discrete offer grid and register it as a buffer named "o_grid"
+        self.n_samples = n_samples
+        # self.register_buffer("o_grid", torch.linspace(...))
+
+    def forward(self, inputs):
+        """
+        Compute the proposer's offer probability distribution given total amount T.
+    
+        Args:
+            inputs (torch.Tensor): 
+            Total monetary amount T in each game instance.
+            Shape: [batch_size]
+    
+        Returns:
+            torch.Tensor: 
+            Probability distribution over possible offers. 
+            Each row sums to 1 after normalization.
+            Shape: [batch_size, n_samples]
+        """
+    # other helper functions can be defined here
+
+# [STRICT IMPLEMENTATION END]
+```

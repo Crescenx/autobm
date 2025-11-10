@@ -1,0 +1,40 @@
+**Auction Game**  
+
+**Participants**: 10 buyers (private β_i) and 10 sellers (private σ_j).  
+
+**Rules**:  
+1. **Dynamic Quotes**:  
+   - Submit bids/asks ≤β_i (buyers) or ≥σ_j (sellers) during 150s rounds.  
+   - Quotes expire after 10s and can be overwritten.  
+2. **Order Books** (real-time sorted):  
+   - *Bid Book*: Active bids sorted descending (highest first), entries:  
+     ```python  
+     class BidOrderEntry(normalized_price: float, from_current: bool)  # from_current≡1  if bid is from b_i  
+     ```  
+   - *Ask Book*: Active asks sorted ascending (lowest first), entries:  
+     ```python  
+     class AskOrderEntry(normalized_price: float, from_current: bool)  # from_current≡0  
+     ```  
+3. **Matching**: Trade executes if bid≥ask, price set by earlier quote. Matched pairs exit.  
+4. **Termination**: Round ends at 150s or when all trade.  
+
+**Information Interface**:  
+- **Private to Buyer**:  
+  - *Bid History* `H: List[BidHistoryEntry]` (current round):  
+    ```python  
+    class BidHistoryEntry(normalized_price: float, is_expired: bool)  # normalized_price = bid/β_i  
+    ```  
+- **Public**:  
+  - Real-time *Bid Book* `Q_active`, *Ask Book* `A_active` (expired bids excluded).  
+  - *Match History* `P: List[float]` (prices of all matches in current round).  
+  - Own bids highlighted (`from_current=1` in `Q_active`).
+  - current time in seconds 
+  
+- All prices normalized by \beta_i. 
+
+
+The model should provide the likelihood of a buyer’s new bid, given the information available at time $t$ in round $r$:
+$$
+Pr(q_{r,t} | \text{information}_{r,t})
+$$
+where $q_{r,t}$ is the normalized price of the new bid.

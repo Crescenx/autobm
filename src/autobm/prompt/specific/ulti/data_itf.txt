@@ -1,0 +1,3 @@
+```python
+inputs: torch.Tensor # [batch_size], Total amount of money
+```

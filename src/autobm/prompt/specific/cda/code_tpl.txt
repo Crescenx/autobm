@@ -1,0 +1,45 @@
+```python
+# [STRICT IMPLEMENTATION BEGIN]
+from typing import Dict
+import torch
+import torch.nn.functional as F
+
+def compute_strategy(params: Dict[str, torch.Tensor], state: MarketState, n_samples=500) -> tuple[torch.Tensor, torch.Tensor]:
+    """
+    Compute bid probability distribution according to the strategic policy, using discretized approximation
+    
+    Args:
+        params: Strategy parameters (trainable tensors with requires_grad=True)
+        state: Market context
+        n_samples: Number of discrete bid points to evaluate (0-1 normalized)
+    
+    Returns:
+        Tuple containing:
+        - q_values: Tensor of candidate bid prices (normalized 0-1)
+        - probabilities: Corresponding probability distribution
+    """
+    # First generate candidate bid prices
+    q_values = torch.linspace(0, 1, n_samples, dtype=torch.float32)
+    # Compute probability distribution
+
+
+def init_params() -> Dict[str, torch.Tensor]:
+    """
+    Initialize strategy parameters with strictly defined leaf tensors
+    
+    Returns:
+        Dictionary of leaf tensors created via direct initialization,
+        meeting PyTorch's autograd requirements:
+        - All tensors created through torch.tensor() constructor
+        - Explicit requires_grad=True for gradient tracking
+        - No inherited computation graph dependencies
+        
+    Leaf Tensor Guarantees:
+        1. Tensors initialized directly with torch.tensor(values)
+        2. No values derived from computational operations
+        3. requires_grad=True set at creation time
+    """
+
+# Define helper functions here for numerical stability and market state processing
+# [STRICT IMPLEMENTATION END]
+```

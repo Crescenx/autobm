@@ -1,0 +1,7 @@
+The ultimatum game is a sequential economic experiment where:
+1. A total amount $T$ is given to a proposer.
+2. The proposer makes an offer $o \in [0,1]$ to a responder.
+3. The responder can either accept or reject the offer.
+4. If the responder accepts, both players receive their respective shares ($(1-o)*T$ for proposer and $o*T$ for responder); 
+5. if rejected, both players receive nothing.
+

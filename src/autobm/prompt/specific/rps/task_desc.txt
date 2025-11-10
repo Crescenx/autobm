@@ -1,0 +1,1 @@
+Design a probabilistic policy model for human players in repeated Rock-Paper-Scissors (RPS) games, constrained to game-theoretic and behavioral principles.

@@ -1,0 +1,51 @@
+[project]
+name = "autobm"
+version = "0.1.0"
+description = "An automated behavior modeling framework based on Large Language Models (LLM)"
+readme = "README.md"
+authors = [
+    {name = "AutoBM Authors"}
+]
+requires-python = ">=3.8"
+dependencies = [
+    "openai",
+    "anthropic",
+    "jinja2",
+    "pandas",
+    "toml",
+    "torch"
+]
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv]
+package = true
+python-preference = "managed"
+
+[tool.llm_client_config]
+default_log_dir = "logs"
+default_csv_dir = "logs"
+
+[tool.llm_client_config.model_mapping.quest]
+provider_type = "aliyun_openai_compatible"
+model = "qwen3-max"
+base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"  # Will be set in code or config
+api_key = ""   # Will be set in code or config
+
+
+[tool.llm_client_config.model_mapping.code]
+provider_type = "aliyun_openai_compatible"
+model = "qwen3-max"
+base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"  # Will be set in code or config
+api_key = ""   # Will be set in code or config
+
+
+[tool.llm_client_config.system_prompts]
+quest = "You are a helpful assistant specialized in reasoning and analysing."
+code = "You are an expert coding assistant. Provide clean and efficient code solutions."
+default = "You are a helpful assistant."
+
+[tool.autobm]
+current_task = "cda"  # Default task, can be "ulti", "rps", or "cda"

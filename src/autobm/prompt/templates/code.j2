@@ -1,0 +1,28 @@
+Your task is to implement the following strategy model using PyTorch.
+
+### Strategy Definition
+```python
+{{ policy_desc }}
+```
+
+### Data Interface Specification
+
+{{ data_itf }}
+
+### Required Output Format
+
+Output should strictly follow the format below, with no additional example usages. 
+(code shoulde be in a Python code block, and no extra code except the following)
+
+{{ code_tpl }}
+
+### Implementation Considerations
+
+1. **Numerical Stability**
+    - Use `torch.clamp` for sensitive operations (exponentials in softmax)
+    - Prefer `torch.logsumexp` and `F.softmax` over manual implementations
+    - Add ε=1e-8 terms in denominators/divisions/log to avoid NaN
+
+2. **Vectorized Programming**
+    - Use tensor operations instead of Python loops
+    - Maintain immutable tensor transformations
