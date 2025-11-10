@@ -95,14 +95,14 @@ AutoBM uses an evolutionary algorithm to iteratively improve models, primarily i
 
 ```mermaid
 graph TD
-    A[main.py] --> B[autobm.py <br/> (Core Framework)]
-    A --> E[prompt/manager.py <br/> (Prompt Management)]
-    B --> C[client.py <br/> (LLM Interface)]
-    B --> D[utils.py <br/> (Utility Functions)]
+    A[main.py] --> B["autobm.py <br> (Core Framework)"]
+    A --> E["prompt/manager.py <br> (Prompt Management)"]
+    B --> C["client.py <br> (LLM Interface)"]
+    B --> D["utils.py <br> (Utility Functions)"]
     C --> E
-    E --> F[data/creation.py <br/> (Data Loading)]
-    F --> G[model/pipeline.py <br/> (Model Pipeline)]
-    G --> H[model/implementations/ <br/> (Task Specific Implementation)]
+    E --> F["data/creation.py <br> (Data Loading)"]
+    F --> G["model/pipeline.py <br> (Model Pipeline)"]
+    G --> H["model/implementations/ <br> (Task Specific Implementation)"]
 ```
 
 ---
