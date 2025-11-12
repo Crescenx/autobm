@@ -1,7 +1,9 @@
 # AutoBM
 ---
 
-This is the implementation of the work Automated Human Strategic Behavior Modeling via Large Language Models
+This is the implementation of the work Automated Human Strategic Behavior Modeling via Large Language Models.
+
+For more details, please check `supplemental_material.pdf`
 
 ---
 
