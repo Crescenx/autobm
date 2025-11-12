@@ -1,8 +1,41 @@
-# AutoBM Project Detailed Overview
+# AutoBM
+---
+
+This is the implementation of the work Automated Human Strategic Behavior Modeling via Large Language Models
 
 ---
 
-## 1. Code Structure Details
+## 1. Quick Start Guide
+
+### 1.1. Environment Configuration
+
+Ensure the `uv` tool is installed.
+
+Edit the `pyproject.toml` file:
+
+```toml
+[tool.autobm]
+current_task = "ulti"  # Options: "ulti", "rps", "cda", or your new task name
+
+[tool.llm_client_config.model_mapping.quest]
+provider_type = "" # See autobm.client.LLMClient for options
+model = "model-name"
+base_url = "your-api-base-url"
+api_key = "your-api-key-here"
+
+[tool.llm_client_config.model_mapping.code]
+# same configuration as quest, or a different LLM for code generation
+```
+
+### 1.2. Running the Program
+
+```bash
+# Run using uv
+uv run python -m src.autobm.main
+```
+
+
+## 2. Code Structure Details
 
 ```
 src/autobm/
@@ -45,71 +78,10 @@ src/autobm/
 
 ---
 
-## 2. Detailed Execution Flow
 
-### 2.1. Program Startup Phase (`main.py`)
-* Reads the `pyproject.toml` configuration file.
-* Initializes the LLM client and services.
-* Creates the Prompt Manager.
-* Loads the training, validation, and testing datasets.
+## 3. Output File Details
 
-### 2.2. Model Initialization Phase (`autobm.py`)
-* Uses the LLM to generate the initial population of models (default 5 models).
-* Each generated model undergoes validation:
-    * Syntax checking.
-    * Functional integrity verification.
-    * Training and testing validation.
-* Validated models are added to the model pool.
-
-### 2.3. Evolutionary Algorithm Phase (`autobm.py`)
-AutoBM uses an evolutionary algorithm to iteratively improve models, primarily involving the following steps:
-
-#### Exploration
-* Randomly selects existing models.
-* Uses the `differ.j2` template to combine strategies from different models.
-* Generates new model variants.
-
-#### Improvement
-* Uses a tournament selection algorithm to choose high-performing models.
-* Uses the `optimistic.j2` template to optimize the selected models.
-* Generates improved model versions.
-
-#### Evaluation
-* Trains each newly generated model.
-* Tests the model performance on the validation set.
-* Calculates the loss function value as the primary performance metric.
-
-#### Selection
-* Adds new models to the model pool.
-* When the model pool exceeds maximum capacity, the worst-performing models are pruned.
-* High-performing models are retained for the next evolutionary round.
-
-### 2.4. Output and Saving Phase
-* Saves the final model pool to `output/pkl/pool.pkl`.
-* Saves training statistics to `output/csv/model_stats.csv`.
-* Generates detailed performance reports and logs.
-
----
-
-## 3. Detailed Module Interaction
-
-```mermaid
-graph TD
-    A[main.py] --> B["autobm.py <br> (Core Framework)"]
-    A --> E["prompt/manager.py <br> (Prompt Management)"]
-    B --> C["client.py <br> (LLM Interface)"]
-    B --> D["utils.py <br> (Utility Functions)"]
-    C --> E
-    E --> F["data/creation.py <br> (Data Loading)"]
-    F --> G["model/pipeline.py <br> (Model Pipeline)"]
-    G --> H["model/implementations/ <br> (Task Specific Implementation)"]
-```
-
----
-
-## 4. Output File Details
-
-### Main Output Directory Structure
+### 3.1. Main Output Directory Structure
 ```
 output/
 ├── pkl/ # Serialized model files
@@ -121,10 +93,10 @@ output/
  └── summaries/ # Intermediate result summaries
 ```
 
-### Output Content Description
-*   **pool.pkl**: Contains model strategy descriptions, generated code, training parameters, test loss, and other relevant information.
-*   **model_stats.csv**: Records statistics such as the best loss and average loss for each evolutionary generation.
-*   **autobm_run.log**: Detailed execution log, including specifics of each evolutionary step.
+### 3.2. Output Content Description
+- **pool.pkl**: Contains model strategy descriptions, generated code, training parameters, test loss, and other relevant information.
+- **model_stats.csv**: Records statistics such as the best loss and average loss for each evolutionary generation.
+- **autobm_run.log**: Detailed execution log, including specifics of each evolutionary step.
 
 ---
 
@@ -203,33 +175,4 @@ Set `current_task` to the new task name in `pyproject.toml`:
 current_task = "newtask"
 ```
 
----
 
-## 6. Quick Start Guide
-
-### Environment Configuration
-
-Ensure the `uv` tool is installed.
-
-Edit the `pyproject.toml` file:
-
-```toml
-[tool.autobm]
-current_task = "ulti"  # Options: "ulti", "rps", "cda", or your new task name
-
-[tool.llm_client_config.model_mapping.quest]
-provider_type = "" # See autobm.client.LLMClient for options
-model = "model-name"
-base_url = "your-api-base-url"
-api_key = "your-api-key-here"
-
-[tool.llm_client_config.model_mapping.code]
-# same configuration as quest, or a different LLM for code generation
-```
-
-### Running the Program
-
-```bash
-# Run using uv
-uv run python -m src.autobm.main
-```
