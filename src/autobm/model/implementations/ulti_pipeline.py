@@ -202,11 +202,12 @@ def test_model(model, test_loader, device="cpu"):
     return results
 
 
-def visualize_test(test_results, num_samples=20):
+def visualize_test(test_results, params=None, num_samples=20):
     """
     Visualize test results with summary statistics and samples.
     Args:
         test_results: Output from test_model (list of dictionaries).
+        params: Trained parameter dictionary (optional, for model parameter reporting).
         num_samples: Number of samples to display (default: 20).
     Returns:
         str: Formatted visualization report.
@@ -214,7 +215,19 @@ def visualize_test(test_results, num_samples=20):
     if not test_results:
         return "Empty test results"
 
-    # Summary statistics
+    report = []
+
+    # 1. Model Parameters (if provided)
+    if params is not None:
+        report.append("Model Parameters:")
+        for name, tensor in params.items():
+            arr = tensor.detach().cpu().numpy()
+            arr_str = np.array2string(arr, precision=4, separator=', ',
+                                     threshold=10, edgeitems=3)
+            report.append(f"  {name}: {arr_str}")
+        report.append("")
+
+    # 2. Summary statistics
     try:
         # Ensure all dictionaries in test_results have the 'loss' key
         if not all('loss' in x for x in test_results):
@@ -227,18 +240,14 @@ def visualize_test(test_results, num_samples=20):
         min_loss = np.min(losses)
         max_loss = np.max(losses)
 
-        report = [
-            "=== Summary Statistics ===",
-            f"Total samples: {total_samples}",
-            f"Mean loss: {mean_loss:.4f} ± {std_loss:.4f}", # Mean ± Standard Deviation
-            f"Loss range: [{min_loss:.4f}, {max_loss:.4f}]" # Min loss, Max loss
-        ]
+        report.append("=== Summary Statistics ===")
+        report.append(f"Total samples: {total_samples}")
+        report.append(f"Mean loss: {mean_loss:.4f} ± {std_loss:.4f}") # Mean ± Standard Deviation
+        report.append(f"Loss range: [{min_loss:.4f}, {max_loss:.4f}]") # Min loss, Max loss
     except Exception as e: # Catch potential errors during statistics calculation
-        report = [
-            "=== Summary Statistics ===",
-            f"Total samples: {len(test_results)}",
-            f"Could not calculate loss statistics: {str(e)}"
-        ]
+        report.append("=== Summary Statistics ===")
+        report.append(f"Total samples: {len(test_results)}")
+        report.append(f"Could not calculate loss statistics: {str(e)}")
 
     # Sample selection (evenly spaced from sorted results)
     try:

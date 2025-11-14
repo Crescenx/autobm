@@ -114,39 +114,41 @@ def train_model(model, train_loader, val_loader, num_epochs=200, patience=15):
     minutes, seconds = divmod(remainder, 60)
     print(f"Total training time: {int(hours)}h {int(minutes)}m {int(seconds)}s")
 
-    losses_df = pd.DataFrame({
-        'epoch': range(1, len(train_losses) + 1),
+    # Create history dictionary
+    history = {
         'train_loss': train_losses,
         'val_loss': val_losses,
         'val_acc': val_accs
-    })
-
-    return {
-        'best_checkpoint': best_checkpoint,
-        'losses_df': losses_df,
-        'best_val_loss': best_val_loss,
-        'best_val_acc': best_val_acc
     }
 
-def test_model(model, test_loader):
+    # Load the best model found during training
+    if best_checkpoint is not None:
+        model.load_state_dict(best_checkpoint)
+
+    return model, history
+
+def test_model(model, test_loader, device="cpu"):
     """
     Test the model and return detailed information for each sample.
 
     Args:
         model: Trained model
         test_loader: DataLoader for the test set
+        device: Device to run the test on ("cpu" or "cuda")
 
     Returns:
         results: A list of dictionaries, each containing details for a sample
     """
+    model = model.to(device)
     model.eval()
     results = []
 
     with torch.no_grad():
         for batch_idx, (features, labels) in enumerate(test_loader):
-            human_hist = features["human_hist"]
-            opponent_hist = features["opponent_hist"]
-            timestep = features["timestep"]
+            human_hist = features["human_hist"].to(device)
+            opponent_hist = features["opponent_hist"].to(device)
+            timestep = features["timestep"].to(device)
+            labels = labels.to(device)
             inputs = [human_hist, opponent_hist, timestep]
 
             probs = model(*inputs)
@@ -165,16 +167,16 @@ def test_model(model, test_loader):
                 opponent_hist_sample = opponent_hist[i] if opponent_hist.dim() > 1 else opponent_hist
 
                 # Convert tensors to lists for better serialization
-                human_hist_list = human_hist_sample.tolist()
-                opponent_hist_list = opponent_hist_sample.tolist()
-                timestep_val = timestep[i].item() if timestep.dim() > 0 else timestep.item()
+                human_hist_list = human_hist_sample.cpu().tolist()
+                opponent_hist_list = opponent_hist_sample.cpu().tolist()
+                timestep_val = timestep[i].cpu().item() if timestep.dim() > 0 else timestep.cpu().item()
 
                 results.append({
                     'sample_id': batch_idx * labels.size(0) + i,
                     'loss': sample_loss,
                     'accuracy': sample_accuracy,
-                    'predicted': predicted[i].item(),
-                    'actual': labels[i].item(),
+                    'predicted': predicted[i].cpu().item(),
+                    'actual': labels[i].cpu().item(),
                     'correct': sample_correct,
                     'human_history': human_hist_list,
                     'opponent_history': opponent_hist_list,
@@ -229,12 +231,13 @@ def test_model_integrity(model, train_loader):
     return True, None
 
 
-def visualize_test(test_results, num_samples=3):
+def visualize_test(test_results, params=None, num_samples=3):
     """
     Visualize RPS test results with sample analysis.
 
     Args:
         test_results: List of dictionaries from test_model function
+        params: Model parameters dictionary (optional, for model parameter reporting)
         num_samples: Number of high/low loss samples to display
 
     Returns:
@@ -264,6 +267,17 @@ def visualize_test(test_results, num_samples=3):
     move_names = {0: 'Rock', 1: 'Paper', 2: 'Scissors'}
 
     report = []
+
+    # 1. Model Parameters (if provided)
+    if params is not None:
+        report.append("Model Parameters:")
+        for name, tensor in params.items():
+            arr = tensor.detach().cpu().numpy()
+            arr_str = np.array2string(arr, precision=4, separator=', ',
+                                     threshold=10, edgeitems=3)
+            report.append(f"  {name}: {arr_str}")
+        report.append("")
+
     report.append("=== RPS Model Test Results ===")
     report.append(f"Total samples: {total_samples}")
     report.append(f"Mean loss: {mean_loss:.4f} ± {std_loss:.4f}")

@@ -130,7 +130,8 @@ class AutoBM:
             loss = float(np.mean(losses))
             if np.isnan(loss) or np.isinf(loss): self._log_message(f"[Warn] Model resulted in NaN/Inf loss."); return None
 
-            vis_detail = visualize_test(test_results=test_results)
+            params = trained_model_or_params if adapter_type == "cda" else trained_model_or_params.state_dict()
+            vis_detail = visualize_test(test_results=test_results, params=params)
 
             judge_p = self.pm.render_prompt('judge.j2', policy=policy, vis=vis_detail) # vis_detail is still used for judgement
             judgment = direct_construct(judge_p, patterns['conclusion'], self.client)
